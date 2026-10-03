@@ -1,0 +1,31 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: project-pipeline-postgres
+    environment:
+      POSTGRES_DB: pipeline
+      POSTGRES_USER: pipeline
+      POSTGRES_PASSWORD: pipeline
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U pipeline -d pipeline"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  app:
+    build: .
+    container_name: project-pipeline-app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/pipeline
+      DB_USERNAME: pipeline
+      DB_PASSWORD: pipeline
+    ports:
+      - "8045:8045"
+volumes:
+  postgres_data:
