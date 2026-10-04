@@ -25,6 +25,8 @@ Controller -> Service -> Repository -> PostgreSQL
 - DELETE /api/pipelines/{id}
 - GET /api/health
 
+Pipeline statuses: CREATED, RUNNING, SUCCESS, FAILED.
+
 ## Run locally
 Start PostgreSQL with `docker compose up -d postgres`, then run `mvn spring-boot:run`.
 The API runs on http://localhost:8045.
